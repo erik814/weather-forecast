@@ -1,7 +1,5 @@
 let lat;
 let lon;
-let searchedCity = "";
-
 
 let currentCityName = document.querySelector('#currentCity');      // current city text area
 let currentTemp = document.querySelector('#currentTemp');          // current temp text area
@@ -10,25 +8,21 @@ let currentHumidity = document.querySelector('#currentHumidity');  // current hu
 
 
 document.querySelector("#searchButton").addEventListener('click', function(e){
-    console.log(document.querySelector("#searchText").value)
+    addCity();
+    runApis();
+}); 
+
+
+function addCity(){
+    let addedCity = document.createElement("p");
+    addedCity.classList.add("addedCity");
+    addedCity.textContent = document.querySelector("#searchText").value;
+    document.getElementById("sideBar").appendChild(addedCity);
+}
+
+
+function runApis(){
     searchedCity = document.querySelector("#searchText").value;
-
-
-    let addCity = document.createElement("p");
-    addCity.classList.add("addedCity")
-    addCity.textContent = searchedCity;
-    document.getElementById("sideBar").appendChild(addCity);
-
-
-
-
-
-
-
-
-
-
-
     var locationAPI = `http://api.openweathermap.org/geo/1.0/direct?q=${searchedCity}&appid=97a926960ee2c9606481892a903aa394`;
 
     fetch(locationAPI)
@@ -39,53 +33,35 @@ document.querySelector("#searchButton").addEventListener('click', function(e){
         .then(data =>{
             lat = data[0].lat;
             lon = data[0].lon;
+            console.log(lat);
+            runWeather();
+        })
+};
+
+
+function runWeather(){
+    var weatherAPI = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=97a926960ee2c9606481892a903aa394`;
+
+    fetch(weatherAPI)
+        .then(response =>{
+            console.log("weather done")
             console.log(lat)
+            return response.json();
         })
         .then(data =>{
-            var weatherAPI = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=97a926960ee2c9606481892a903aa394`;
+            console.log(data)
+            console.log(data.city.name)
+            const cityName = data.city.name;          //selected city name
+            const humidity = data.list[0].humidity;   //selected city humidity
+            const kelvin = data.list[0].main.temp;      //selected city kelvin temp
+            let temp = Math.floor(((kelvin-273.15)*1.8)+32);  //convert kelvin to fahrenheit
 
-            fetch(weatherAPI)
-                .then(response =>{
-                    console.log("weather done")
-                    console.log(lat)
-                    return response.json();
-                })
-                .then(data =>{
-                    console.log(data)
-                    console.log(data.city.name)
-                    const cityName = data.city.name;          //selected city name
-                    const humidity = data.list[0].humidity;   //selected city humidity
-                    const kelvin = data.list[0].main.temp;      //selected city kelvin temp
-                    let temp = Math.floor(((kelvin-273.15)*1.8)+32);  //convert kelvin to fahrenheit
+            currentCityName.textContent = `${cityName} ${moment().format('l')}`;
+            currentTemp.textContent = `Temp: ${temp}F`;
+            currentHumidity.textContent = humidity;
+            console.log("lat")
 
-                    currentCityName.textContent = `${cityName} ${moment().format('l')}`;
-                    currentTemp.textContent = `Temp: ${temp}F`;
-                    currentHumidity.textContent = humidity;
-                    console.log("lat")
-                })
+            //clear the search text after the APIs are done with it
+            document.querySelector("#searchText").value = "";
         })
-});        
-
-// var weatherAPI = `https://api.openweathermap.org/data/2.5/forecast?lat=44.9537&lon=-93.0900&appid=97a926960ee2c9606481892a903aa394`
-// var weatherAPI = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=97a926960ee2c9606481892a903aa394`;
-
-// fetch(weatherAPI)
-//     .then(response =>{
-//         console.log("weather done")
-//         console.log(lat)
-//         return response.json();
-//     })
-//     .then(data =>{
-//         console.log(data)
-//         console.log(data.city.name)
-//         const cityName = data.city.name;          //selected city name
-//         const humidity = data.list[0].humidity;   //selected city humidity
-//         const kelvin = data.list[0].main.temp;      //selected city kelvin temp
-//         let temp = Math.floor(((kelvin-273.15)*1.8)+32);  //convert kelvin to fahrenheit
-
-//         currentCityName.textContent = `${cityName} ${moment().format('l')}`;
-//         currentTemp.textContent = `Temp: ${temp}F`;
-//         currentHumidity.textContent = humidity;
-//         console.log("lat")
-//     })
-
+}

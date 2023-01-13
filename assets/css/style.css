@@ -1,9 +1,66 @@
 *{
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Poppins', sans-serif;
 }
 
 h1{
     padding: 15px;
     color:aliceblue;
-    background-image: linear-gradient(to bottom right, rgb(3, 96, 139), rgb(84, 170, 241));
+    background-image: linear-gradient(to bottom right, rgb(84, 170, 241), rgb(3, 66, 139));
 }
+
+.greaterContainer{
+    display: flex;
+}
+
+
+
+/* side bar */
+
+.sidebarContainer{
+    width: 25%;
+}
+
+.sidebarItems{
+    margin: 0.5rem;
+}
+
+#searchText{
+    border-radius: 8px;
+    font-size: 1.5rem;
+    width: 95%;
+}
+
+#searchButton{
+    background-image: linear-gradient(to bottom right, rgb(84, 170, 241), rgb(3, 66, 139));
+    color:aliceblue;
+    border: 0;
+    padding: 0.5rem;
+    border-radius: 8px;
+    width: 95%;
+}
+
+.addedCity{
+    background-color:rgb(182, 182, 182);
+    border: 0;
+    padding: 0.5rem;
+    border-radius: 8px;
+    width: 95%;
+    text-align: center;
+    margin: 0.5rem;
+}
+
+/* forecast */
+
+.forecastContainer{
+    width: 75%;
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0.5rem;
+}
+
+.currentForecast{
+    width: 100%;
+    outline: 1px solid black;
+    padding: 0.5rem;
+}
+
