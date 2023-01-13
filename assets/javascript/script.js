@@ -1,5 +1,7 @@
-let lat = 44.9479;
-let lon = -93.0873;
+let lat = "";
+let lon = "";
+let searchedCity = "Saint Paul";
+
 
 let currentCityName = document.querySelector('#currentCity');      // current city text area
 let currentTemp = document.querySelector('#currentTemp');          // current temp text area
@@ -8,14 +10,34 @@ let currentHumidity = document.querySelector('#currentHumidity');  // current hu
 
 
 document.querySelector("#searchButton").addEventListener('click', function(e){
-    console.log("yes hello")
+    console.log(document.querySelector("#searchText").textContent)
 });
 
 
 
-var requestedAPI = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=97a926960ee2c9606481892a903aa394`
 
-fetch(requestedAPI)
+
+
+
+
+
+var weatherAPI = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=97a926960ee2c9606481892a903aa394`;
+var locationAPI = `http://api.openweathermap.org/geo/1.0/direct?q=${searchedCity}&appid=97a926960ee2c9606481892a903aa394`;
+
+
+fetch(locationAPI)
+    .then(response =>{
+        return response.json();
+    })
+    .then(data =>{
+        let lat = data[0].lat;
+        let lon = data[0].lon;
+    })
+
+
+
+
+fetch(weatherAPI)
     .then(response =>{
         return response.json();
     })
@@ -30,5 +52,5 @@ fetch(requestedAPI)
         currentCityName.textContent = `${cityName} ${moment().format('l')}`;
         currentTemp.textContent = `Temp: ${temp}F`;
         currentHumidity.textContent = humidity;
-
     })
+
