@@ -14,6 +14,19 @@ document.querySelector("#searchButton").addEventListener('click', function(e){
     searchedCity = document.querySelector("#searchText").value;
 
 
+    let addCity = document.createElement("p");
+    addCity.classList.add("addedCity")
+    addCity.textContent = searchedCity;
+    document.getElementById("sideBar").appendChild(addCity);
+
+
+
+
+
+
+
+
+
 
 
     var locationAPI = `http://api.openweathermap.org/geo/1.0/direct?q=${searchedCity}&appid=97a926960ee2c9606481892a903aa394`;
