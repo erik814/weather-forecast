@@ -83,3 +83,19 @@ h1{
     height: auto;
     margin-bottom: 0.5rem;
 }
+
+/* 5 day */
+
+.fivedayContainer{
+    display: flex;
+    width: 100%;
+    
+    color: white;
+}
+
+.fiveday{
+    background-color: rgb(44, 39, 122);
+    width: 20%;
+    margin: 0.5rem;
+    padding: 0.5rem;
+}

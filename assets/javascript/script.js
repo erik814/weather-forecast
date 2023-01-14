@@ -31,12 +31,14 @@ document.querySelector('#searchedHome').addEventListener('click', function(e){
 function pullFromStorage(){
     let citiesFromStorage = JSON.parse(localStorage.getItem("searchCity"));
     
-    citiesFromStorage.forEach(function(city, index){
-        let addedCity = document.createElement("p");
-        addedCity.classList.add("addedCity");
-        addedCity.textContent = city;
-        document.getElementById("searchedHome").appendChild(addedCity);
-    })
+    if(citiesFromStorage !== null){
+        citiesFromStorage.forEach(function(city, index){
+            let addedCity = document.createElement("p");
+            addedCity.classList.add("addedCity");
+            addedCity.textContent = city;
+            document.getElementById("searchedHome").appendChild(addedCity);
+        })
+    }
 };
 
 //Saves the searched city to local storage
@@ -122,10 +124,44 @@ function parseWeatherData(data){
             fiveDaysOfWeather.push(obj);
         }
 
-        if( newCurrDay !== currDTValue && fiveDaysOfWeather.length < 5 && !fiveDaysOfWeather.find( day => day.dt_txt === obj.dt ) ){
-            currDTValue = newCurrDay
+        if(newCurrDay !== currDTValue && fiveDaysOfWeather.length < 5 && !fiveDaysOfWeather.find(day => day.dt_txt === obj.dt)){
+            currDTValue = newCurrDay;
         }
     })
 
     console.log(fiveDaysOfWeather)
+    populate5dayForecast();
+};
+
+function populate5dayForecast(){
+    console.log("hey");
+
+    fiveDaysOfWeather.forEach(function(object, index){
+
+        let i = (index+1);
+        console.log(document.querySelector(`.day${i}Humidity`).textContent)
+
+        let kelvin = object.main.temp;
+        let dayItemp = Math.floor(((kelvin-273.15)*1.8)+32)
+        let dayIwind = object.wind.speed;
+        let dayIhumidity = object.main.humidity;
+        // let iconCode = object.weather[0].icon;
+        // console.log(iconCode)
+        // let iconURL = `http://openweathermap.org/img/wn/${iconCode}@2x.png`
+
+        let dayItempText = document.querySelector(`.day${i}Temp`);
+        let dayIiconText = document.querySelector(`day${i}icon`)
+        let dayIwindText = document.querySelector(`.day${i}wind`);
+        let dayIhumidityText = document.querySelector(`.day${i}Humidity`);
+
+
+        dayItempText.textContent = `Temp: ${dayItemp}F`;
+        // dayIiconText.src = iconURL;
+        dayIwindText.textContent = `Wind: ${dayIwind} MPH`;
+        dayIhumidityText.textContent = `Humidity: ${dayIhumidity}%`;
+
+        console.log(dayIhumidity);
+
+
+    })
 }
