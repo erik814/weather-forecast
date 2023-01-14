@@ -21,10 +21,9 @@ document.querySelector("#searchButton").addEventListener('click', function(e){
 
 // previously searched cities click event
 document.querySelector('#searchedHome').addEventListener('click', function(e){
-    console.log(e.target.textContent)
     searchedCity = e.target.textContent
     runGeo();
-})
+});
 
 
 
@@ -38,13 +37,13 @@ function pullFromStorage(){
         addedCity.textContent = city;
         document.getElementById("searchedHome").appendChild(addedCity);
     })
-}
+};
 
 //Saves the searched city to local storage
 function saveToStorage(){
     citiesFromStorage.push(document.querySelector("#searchText").value);
     localStorage.setItem("searchCity", JSON.stringify(citiesFromStorage));
-}
+};
 
 //displays latest searched city
 function addCityTab(){
@@ -52,7 +51,7 @@ function addCityTab(){
     addedCity.classList.add("addedCity");
     addedCity.textContent = document.querySelector("#searchText").value;
     document.getElementById("searchedHome").appendChild(addedCity);
-}
+};
 
 //Finds the latitude and longitude of the searched city
 function runGeo(){
@@ -79,19 +78,54 @@ function runWeather(){
             return response.json();
         })
         .then(data =>{
+            console.log(data)
             const cityName = data.city.name;          //selected city name
             const wind = data.list[0].wind.speed;     //selected city wind speed
             const humidity = data.list[0].main.humidity;   //selected city humidity
             const kelvin = data.list[0].main.temp;      //selected city kelvin temp
             let temp = Math.floor(((kelvin-273.15)*1.8)+32);  //convert kelvin to fahrenheit
+            const iconCode = data.list[0].weather[0].icon;            //get icon code
+            console.log(iconCode)
+            const iconURL = `http://openweathermap.org/img/wn/${iconCode}@2x.png`;
 
             currentCityName.textContent = `${cityName} ${moment().format('l')}`;
+            document.querySelector(".icon").src= iconURL;
             currentTemp.textContent = `Temp: ${temp}F`;
             currentWind.textContent = `Wind: ${wind}mph`;
             currentHumidity.textContent = `Humidity: ${humidity}%`;
 
             //clears the search text input after the APIs are done with it
             document.querySelector("#searchText").value = "";
-            // parseWeatherData(data)
+
+            parseWeatherData(data.list);
         })
+};
+
+
+// Some of the below code was given by my teacher because open weather maps changed how they give the five day forecast
+// I worked on it with some other students too
+
+const fiveDaysOfWeather = [];
+let currDTValue = moment().format("YYYY-MM-DD hh:mm:ss");
+let newcurrDTValue = currDTValue.split(" ")[0];
+
+function parseWeatherData(data){
+    console.log(data.list)
+    data.forEach(obj =>{
+
+        const dateObj = moment(obj.dt_txt)
+        const currday = dateObj._i;
+        const newCurrDay = currday.split(" ")[0];
+
+        if(newCurrDay !== newcurrDTValue && fiveDaysOfWeather.length < 5 && !fiveDaysOfWeather.find(day => day.dt_txt.split(" ")[0] === obj.dt_txt.split(" ")[0])){
+            currDTValue = newCurrDay;
+            fiveDaysOfWeather.push(obj);
+        }
+
+        if( newCurrDay !== currDTValue && fiveDaysOfWeather.length < 5 && !fiveDaysOfWeather.find( day => day.dt_txt === obj.dt ) ){
+            currDTValue = newCurrDay
+        }
+    })
+
+    console.log(fiveDaysOfWeather)
 }

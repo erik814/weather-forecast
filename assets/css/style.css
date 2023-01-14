@@ -74,3 +74,12 @@ h1{
     padding: 0.5rem;
 }
 
+.cityAndIcon{
+    display: flex;
+}
+
+.icon{
+    width: 50px;
+    height: auto;
+    margin-bottom: 0.5rem;
+}
