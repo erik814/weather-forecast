@@ -5,63 +5,81 @@ let currentCityName = document.querySelector('#currentCity');      // current ci
 let currentTemp = document.querySelector('#currentTemp');          // current temp text area
 let currentHumidity = document.querySelector('#currentHumidity');  // current humidity text area
 
+savedCities = [];
+citiesFromStorage = [];
 
+pullFromStorage();
 
 document.querySelector("#searchButton").addEventListener('click', function(e){
-    addCity();
-    runApis();
+    runGeo();
+    saveToStorage();
+    addCityTab();
 }); 
 
+//Pulls stored searched cities from storage and displays them under the search area
+function pullFromStorage(){
+    let citiesFromStorage = JSON.parse(localStorage.getItem("searchCity"));
+    
+    citiesFromStorage.forEach(function(city, index){
+        let addedCity = document.createElement("p");
+        addedCity.classList.add("addedCity");
+        addedCity.textContent = city;
+        document.getElementById("sideBar").appendChild(addedCity);
+    })
+}
 
-function addCity(){
+//Saves the searched city to local storage
+function saveToStorage(){
+    citiesFromStorage.push(document.querySelector("#searchText").value);
+    localStorage.setItem("searchCity", JSON.stringify(citiesFromStorage));
+}
+
+//displays latest searched city
+function addCityTab(){
     let addedCity = document.createElement("p");
     addedCity.classList.add("addedCity");
     addedCity.textContent = document.querySelector("#searchText").value;
     document.getElementById("sideBar").appendChild(addedCity);
 }
 
-
-function runApis(){
+//Finds the latitude and longitude of the searched city
+function runGeo(){
     searchedCity = document.querySelector("#searchText").value;
     var locationAPI = `http://api.openweathermap.org/geo/1.0/direct?q=${searchedCity}&appid=97a926960ee2c9606481892a903aa394`;
 
     fetch(locationAPI)
         .then(response =>{
-            console.log("geo done")
             return response.json();
         })
         .then(data =>{
             lat = data[0].lat;
             lon = data[0].lon;
-            console.log(lat);
             runWeather();
         })
 };
 
-
+// Retrieves the weather data for the given latitude and longitude
 function runWeather(){
     var weatherAPI = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=97a926960ee2c9606481892a903aa394`;
 
     fetch(weatherAPI)
         .then(response =>{
-            console.log("weather done")
-            console.log(lat)
             return response.json();
         })
         .then(data =>{
-            console.log(data)
-            console.log(data.city.name)
             const cityName = data.city.name;          //selected city name
-            const humidity = data.list[0].humidity;   //selected city humidity
+            const wind = data.list[0].wind.speed;     //selected city wind speed
+            const humidity = data.list[0].main.humidity;   //selected city humidity
             const kelvin = data.list[0].main.temp;      //selected city kelvin temp
             let temp = Math.floor(((kelvin-273.15)*1.8)+32);  //convert kelvin to fahrenheit
 
             currentCityName.textContent = `${cityName} ${moment().format('l')}`;
             currentTemp.textContent = `Temp: ${temp}F`;
-            currentHumidity.textContent = humidity;
-            console.log("lat")
+            currentWind.textContent = `Wind: ${wind}mph`;
+            currentHumidity.textContent = `Humidity: ${humidity}%`;
 
-            //clear the search text after the APIs are done with it
+            //clears the search text input after the APIs are done with it
             document.querySelector("#searchText").value = "";
+            // parseWeatherData(data)
         })
 }
