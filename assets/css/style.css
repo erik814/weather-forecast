@@ -47,7 +47,17 @@ h1{
     width: 95%;
     text-align: center;
     margin: 0.5rem;
+    cursor: pointer;
 }
+.addedCity:hover{
+    background-image: linear-gradient(to bottom right, rgb(84, 170, 241), rgb(3, 66, 139));
+    color:aliceblue;
+    border: 0;
+    padding: 0.5rem;
+    border-radius: 8px;
+    width: 95%;
+}
+
 
 /* forecast */
 

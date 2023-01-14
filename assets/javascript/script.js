@@ -5,16 +5,28 @@ let currentCityName = document.querySelector('#currentCity');      // current ci
 let currentTemp = document.querySelector('#currentTemp');          // current temp text area
 let currentHumidity = document.querySelector('#currentHumidity');  // current humidity text area
 
+let searchedCity = "";
 savedCities = [];
 citiesFromStorage = [];
 
 pullFromStorage();
 
+//search button click event
 document.querySelector("#searchButton").addEventListener('click', function(e){
+    searchedCity = document.querySelector("#searchText").value;
     runGeo();
     saveToStorage();
     addCityTab();
 }); 
+
+// previously searched cities click event
+document.querySelector('#searchedHome').addEventListener('click', function(e){
+    console.log(e.target.textContent)
+    searchedCity = e.target.textContent
+    runGeo();
+})
+
+
 
 //Pulls stored searched cities from storage and displays them under the search area
 function pullFromStorage(){
@@ -24,7 +36,7 @@ function pullFromStorage(){
         let addedCity = document.createElement("p");
         addedCity.classList.add("addedCity");
         addedCity.textContent = city;
-        document.getElementById("sideBar").appendChild(addedCity);
+        document.getElementById("searchedHome").appendChild(addedCity);
     })
 }
 
@@ -39,12 +51,12 @@ function addCityTab(){
     let addedCity = document.createElement("p");
     addedCity.classList.add("addedCity");
     addedCity.textContent = document.querySelector("#searchText").value;
-    document.getElementById("sideBar").appendChild(addedCity);
+    document.getElementById("searchedHome").appendChild(addedCity);
 }
 
 //Finds the latitude and longitude of the searched city
 function runGeo(){
-    searchedCity = document.querySelector("#searchText").value;
+    // searchedCity = document.querySelector("#searchText").value;
     var locationAPI = `http://api.openweathermap.org/geo/1.0/direct?q=${searchedCity}&appid=97a926960ee2c9606481892a903aa394`;
 
     fetch(locationAPI)
