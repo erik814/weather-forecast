@@ -55,7 +55,7 @@ function addCityTab(){
     document.getElementById("searchedHome").appendChild(addedCity);
 };
 
-//Finds the latitude and longitude of the searched city
+//Finds the latitude and longitude of the searched city    &units=imperial
 function runGeo(){
     // searchedCity = document.querySelector("#searchText").value;
     var locationAPI = `http://api.openweathermap.org/geo/1.0/direct?q=${searchedCity}&appid=97a926960ee2c9606481892a903aa394`;
@@ -139,29 +139,25 @@ function populate5dayForecast(){
     fiveDaysOfWeather.forEach(function(object, index){
 
         let i = (index+1);
-        console.log(document.querySelector(`.day${i}Humidity`).textContent)
 
+        let dayIdate = object.dt_txt
         let kelvin = object.main.temp;
         let dayItemp = Math.floor(((kelvin-273.15)*1.8)+32)
         let dayIwind = object.wind.speed;
         let dayIhumidity = object.main.humidity;
-        // let iconCode = object.weather[0].icon;
-        // console.log(iconCode)
-        // let iconURL = `http://openweathermap.org/img/wn/${iconCode}@2x.png`
 
+        let dayIdateText = document.querySelector(`.day${i}date`)
         let dayItempText = document.querySelector(`.day${i}Temp`);
-        let dayIiconText = document.querySelector(`day${i}icon`)
         let dayIwindText = document.querySelector(`.day${i}wind`);
         let dayIhumidityText = document.querySelector(`.day${i}Humidity`);
 
-
+        dayIdateText.textContent = moment(dayIdate).format('L');
         dayItempText.textContent = `Temp: ${dayItemp}F`;
-        // dayIiconText.src = iconURL;
         dayIwindText.textContent = `Wind: ${dayIwind} MPH`;
         dayIhumidityText.textContent = `Humidity: ${dayIhumidity}%`;
-
-        console.log(dayIhumidity);
-
-
     })
+}
+
+function rewrite5day(){
+    
 }
