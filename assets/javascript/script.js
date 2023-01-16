@@ -58,7 +58,7 @@ function addCityTab(){
 //Finds the latitude and longitude of the searched city    &units=imperial
 function runGeo(){
     // searchedCity = document.querySelector("#searchText").value;
-    var locationAPI = `http://api.openweathermap.org/geo/1.0/direct?q=${searchedCity}&appid=97a926960ee2c9606481892a903aa394`;
+    var locationAPI = `https://api.openweathermap.org/geo/1.0/direct?q=${searchedCity}&appid=97a926960ee2c9606481892a903aa394`;
 
     fetch(locationAPI)
         .then(response =>{
@@ -88,7 +88,7 @@ function runWeather(){
             let temp = Math.floor(((kelvin-273.15)*1.8)+32);  //convert kelvin to fahrenheit
             const iconCode = data.list[0].weather[0].icon;            //get icon code
             console.log(iconCode)
-            const iconURL = `http://openweathermap.org/img/wn/${iconCode}@2x.png`;
+            const iconURL = `https://openweathermap.org/img/wn/${iconCode}@2x.png`;
 
             currentCityName.textContent = `${cityName} ${moment().format('l')}`;
             document.querySelector(".icon").src= iconURL;
