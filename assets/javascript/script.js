@@ -80,7 +80,6 @@ function runWeather(){
             return response.json();
         })
         .then(data =>{
-            console.log(data)
             const cityName = data.city.name;          //selected city name
             const wind = data.list[0].wind.speed;     //selected city wind speed
             const humidity = data.list[0].main.humidity;   //selected city humidity
@@ -96,46 +95,37 @@ function runWeather(){
             currentWind.textContent = `Wind: ${wind}mph`;
             currentHumidity.textContent = `Humidity: ${humidity}%`;
 
-            //clears the search text input after the APIs are done with it
-            document.querySelector("#searchText").value = "";
+            // //clears the search text input after the APIs are done with it
+            // document.querySelector("#searchText").value = "";
 
             parseWeatherData(data.list);
         })
 };
 
-
-// Some of the below code was given by my teacher because open weather maps changed how they give the five day forecast
-// I worked on it with some other students too
-
+// Takes the weather data and pulls 5 days from it
+// Some of this code was from my teacher
 const fiveDaysOfWeather = [];
 let currDTValue = moment().format("YYYY-MM-DD hh:mm:ss");
-let newcurrDTValue = currDTValue.split(" ")[0];
 
 function parseWeatherData(data){
-    console.log(data.list)
-    data.forEach(obj =>{
+    console.log(data)
+    data.forEach( obj => {
+        const dateObj = new moment(obj.dt)
+        const currday = moment(dateObj * 1000).format("YYYY-MM-DD");
 
-        const dateObj = moment(obj.dt_txt)
-        const currday = dateObj._i;
-        const newCurrDay = currday.split(" ")[0];
-
-        if(newCurrDay !== newcurrDTValue && fiveDaysOfWeather.length < 5 && !fiveDaysOfWeather.find(day => day.dt_txt.split(" ")[0] === obj.dt_txt.split(" ")[0])){
-            currDTValue = newCurrDay;
-            fiveDaysOfWeather.push(obj);
-        }
-
-        if(newCurrDay !== currDTValue && fiveDaysOfWeather.length < 5 && !fiveDaysOfWeather.find(day => day.dt_txt === obj.dt)){
-            currDTValue = newCurrDay;
+        if( currday !== currDTValue && fiveDaysOfWeather.length < 5 && !fiveDaysOfWeather.find( day => day.dt === obj.dt) ){
+            currDTValue = currday 
+            fiveDaysOfWeather.push(obj)
         }
     })
 
-    console.log(fiveDaysOfWeather)
     populate5dayForecast();
-};
+}
+
 
 function populate5dayForecast(){
-    console.log("hey");
 
+    console.log(fiveDaysOfWeather)
     fiveDaysOfWeather.forEach(function(object, index){
 
         let i = (index+1);
@@ -156,6 +146,8 @@ function populate5dayForecast(){
         dayIwindText.textContent = `Wind: ${dayIwind} MPH`;
         dayIhumidityText.textContent = `Humidity: ${dayIhumidity}%`;
     })
+    //clears the search text input after the APIs are done with it
+    document.querySelector("#searchText").value = "";
 }
 
 function rewrite5day(){
