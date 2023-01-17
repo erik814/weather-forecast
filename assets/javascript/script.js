@@ -9,6 +9,9 @@ let searchedCity = "";
 savedCities = [];
 citiesFromStorage = [];
 
+const fiveDaysOfWeather = [];
+let currDTValue = moment().format("YYYY-MM-DD");
+
 pullFromStorage();
 
 //search button click event
@@ -86,7 +89,6 @@ function runWeather(){
             const kelvin = data.list[0].main.temp;      //selected city kelvin temp
             let temp = Math.floor(((kelvin-273.15)*1.8)+32);  //convert kelvin to fahrenheit
             const iconCode = data.list[0].weather[0].icon;            //get icon code
-            console.log(iconCode)
             const iconURL = `https://openweathermap.org/img/wn/${iconCode}@2x.png`;
 
             currentCityName.textContent = `${cityName} ${moment().format('l')}`;
@@ -96,25 +98,20 @@ function runWeather(){
             currentHumidity.textContent = `Humidity: ${humidity}%`;
 
             // //clears the search text input after the APIs are done with it
-            // document.querySelector("#searchText").value = "";
-
             parseWeatherData(data.list);
         })
 };
 
 // Takes the weather data and pulls 5 days from it
-// Some of this code was from my teacher
-const fiveDaysOfWeather = [];
-let currDTValue = moment().format("YYYY-MM-DD hh:mm:ss");
+// Some of this function was given by my teacher
 
 function parseWeatherData(data){
-    console.log(data)
     data.forEach( obj => {
         const dateObj = new moment(obj.dt)
         const currday = moment(dateObj * 1000).format("YYYY-MM-DD");
 
-        if( currday !== currDTValue && fiveDaysOfWeather.length < 5 && !fiveDaysOfWeather.find( day => day.dt === obj.dt) ){
-            currDTValue = currday 
+        if( currday !== currDTValue && fiveDaysOfWeather.length < 5 && !fiveDaysOfWeather.find(day => day.dt === obj.dt) ){
+            currDTValue = currday
             fiveDaysOfWeather.push(obj)
         }
     })
@@ -125,7 +122,6 @@ function parseWeatherData(data){
 
 function populate5dayForecast(){
 
-    console.log(fiveDaysOfWeather)
     fiveDaysOfWeather.forEach(function(object, index){
 
         let i = (index+1);
