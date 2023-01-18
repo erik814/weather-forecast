@@ -9,7 +9,7 @@ let searchedCity = "";
 savedCities = [];
 citiesFromStorage = [];
 
-const fiveDaysOfWeather = [];
+let fiveDaysOfWeather = [];
 let currDTValue = moment().format("YYYY-MM-DD");
 
 pullFromStorage();
@@ -106,6 +106,7 @@ function runWeather(){
 // Some of this function was given by my teacher
 
 function parseWeatherData(data){
+    fiveDaysOfWeather = []
     data.forEach( obj => {
         const dateObj = new moment(obj.dt)
         const currday = moment(dateObj * 1000).format("YYYY-MM-DD");
@@ -114,7 +115,7 @@ function parseWeatherData(data){
             currDTValue = currday
             fiveDaysOfWeather.push(obj)
         }
-    })
+    });
 
     populate5dayForecast();
 }
