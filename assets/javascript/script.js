@@ -6,8 +6,8 @@ let currentTemp = document.querySelector('#currentTemp');          // current te
 let currentHumidity = document.querySelector('#currentHumidity');  // current humidity text area
 
 let searchedCity = "";
-savedCities = [];
-citiesFromStorage = [];
+let savedCities = [];
+let citiesFromStorage = [];
 
 let fiveDaysOfWeather = [];
 let currDTValue = moment().format("YYYY-MM-DD");
@@ -58,7 +58,7 @@ function addCityTab(){
     document.getElementById("searchedHome").appendChild(addedCity);
 };
 
-//Finds the latitude and longitude of the searched city    &units=imperial
+//Finds the latitude and longitude of the searched city
 function runGeo(){
     // searchedCity = document.querySelector("#searchText").value;
     var locationAPI = `https://api.openweathermap.org/geo/1.0/direct?q=${searchedCity}&appid=97a926960ee2c9606481892a903aa394`;
@@ -103,7 +103,7 @@ function runWeather(){
 };
 
 // Takes the weather data and pulls 5 days from it
-// Some of this function was given by my teacher
+// Most of the parseWeatherData function was given by my teacher
 
 function parseWeatherData(data){
     fiveDaysOfWeather = []
@@ -127,26 +127,27 @@ function populate5dayForecast(){
 
         let i = (index+1);
 
-        let dayIdate = object.dt_txt
+        let dayIdate = object.dt_txt;
+        let dayIicon = object.weather[0].icon;
         let kelvin = object.main.temp;
         let dayItemp = Math.floor(((kelvin-273.15)*1.8)+32)
         let dayIwind = object.wind.speed;
         let dayIhumidity = object.main.humidity;
 
-        let dayIdateText = document.querySelector(`.day${i}date`)
+        const iconCode = object.weather[0].icon;
+        const iconURL = `https://openweathermap.org/img/wn/${iconCode}@2x.png`;
+
+        let dayIdateText = document.querySelector(`.day${i}date`);
         let dayItempText = document.querySelector(`.day${i}Temp`);
         let dayIwindText = document.querySelector(`.day${i}wind`);
         let dayIhumidityText = document.querySelector(`.day${i}Humidity`);
 
         dayIdateText.textContent = moment(dayIdate).format('L');
+        document.querySelector(`.day${i}icon`).src= iconURL;
         dayItempText.textContent = `Temp: ${dayItemp}F`;
         dayIwindText.textContent = `Wind: ${dayIwind} MPH`;
         dayIhumidityText.textContent = `Humidity: ${dayIhumidity}%`;
     })
     //clears the search text input after the APIs are done with it
     document.querySelector("#searchText").value = "";
-}
-
-function rewrite5day(){
-    
 }
