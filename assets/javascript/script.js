@@ -97,7 +97,6 @@ function runWeather(){
             currentWind.textContent = `Wind: ${wind}mph`;
             currentHumidity.textContent = `Humidity: ${humidity}%`;
 
-            // //clears the search text input after the APIs are done with it
             parseWeatherData(data.list);
         })
 };

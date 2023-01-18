@@ -14,7 +14,7 @@ All of these gray boxes are clickable, and will bring up the weather information
 
 Here is a screenshot of the webpage:
 
-![Screenshot](./assets/Screenshot%20(9).png)
+![Screenshot](./assets/Screenshot%20(11).png)
 
 
 ## Tasks
